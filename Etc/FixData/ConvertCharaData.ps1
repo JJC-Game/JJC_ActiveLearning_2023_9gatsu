@@ -1,6 +1,6 @@
 $scriptPath = Get-Location
 $excelFileName = "FixData.xlsm"
-$excelFunctionName = "OutputItemFixData"
+$excelFunctionName = "OutputCharaFixData"
 $excelPath = Join-Path $scriptPath $excelFileName
 if(Test-Path $excelPath){
     $writeString = $excelFileName + "ÇÃä÷êî" + $excelFunctionName + "ÇåƒÇ—èoÇµÇƒÇ¢Ç‹Ç∑."
@@ -33,7 +33,7 @@ if(Test-Path $excelPath){
     }
 
     #ê¨â ï®Çutf-8Ç…ïœä∑Ç∑ÇÈ.
-    $sourceFileName = "ItemFixData.csv"
+    $sourceFileName = "CharaFixData.csv"
     $sourcePath = Join-Path $scriptPath $sourceFileName
     $allText = Get-Content $sourcePath -Encoding default
     Write-Output $allText | Out-File $sourcePath -Encoding UTF8
