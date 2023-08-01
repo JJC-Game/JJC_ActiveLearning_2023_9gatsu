@@ -1,0 +1,13 @@
+CREATE TABLE user_data (
+    Id INT(11) AUTO_INCREMENT NOT NULL,
+    UserName TEXT NOT NULL,
+    UserHasCharaFlag INT(11) UNSIGNED NOT NULL,
+    PRIMARY KEY (Id)
+);
+
+CREATE TABLE item_data (
+    Id INT(11) AUTO_INCREMENT NOT NULL,
+    UserId INT(11) NOT NULL,
+    ItemId INT(11) NOT NULL,
+    PRIMARY KEY (Id)
+);
