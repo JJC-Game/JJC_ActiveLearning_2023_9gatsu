@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public class P3_GachaManager : MonoBehaviour
 {
-    [SerializeField]
-    int gachaPickCharacterId;
-
     const int CHARACTER_NUM = 32;
 
     GameObject gachaPerformInstance;
@@ -18,7 +15,6 @@ public class P3_GachaManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gachaPickCharacterId = 0;
         gachaPerformInstance = GameObject.Find("UIParts_Perform_Project3");
         performImage = gachaPerformInstance.transform.Find("Image").GetComponent<Image>();
         performName = gachaPerformInstance.transform.Find("Name").GetComponent<Text>();

@@ -56,8 +56,6 @@ public class P3_UserDataManager : BaseUserDataManager
 
         for (int charaId = 0; charaId < DefineParam.CHARA_NUM; charaId++)
         {
-            // 所持フラグを元にして、所持しているかどうかを確認する.
-            bool isNotHaveChara = false;
             // シフト演算子を使って、二進数で確認する.
             // 当該のビットの値のANDの結果が0なら、フラグが立っていない = 所持していない.
             // 当該のビットの値のANDの結果が0ではないなら、フラグが立っている = 所持している.
