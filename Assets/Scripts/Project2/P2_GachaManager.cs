@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
-public class P1_GachaManager : MonoBehaviour
+public class P2_GachaManager : MonoBehaviour
 {
     [SerializeField]
     int gachaPickCharacterId;
@@ -17,7 +18,7 @@ public class P1_GachaManager : MonoBehaviour
     void Start()
     {
         gachaPickCharacterId = 0;
-        gachaPerformInstance = GameObject.Find("UIParts_Perform_Project1");
+        gachaPerformInstance = GameObject.Find("UIParts_Perform_Project2");
         performImage = gachaPerformInstance.transform.Find("Image").GetComponent<Image>();
         performName = gachaPerformInstance.transform.Find("Name").GetComponent<Text>();
         performBack = gachaPerformInstance.transform.Find("Back").GetComponent<Image>();
@@ -27,7 +28,7 @@ public class P1_GachaManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void OnClickGachaButton()
@@ -37,6 +38,9 @@ public class P1_GachaManager : MonoBehaviour
         Debug.Log(gachaPickCharacterId.ToString());
 
         DrawPerform();
+
+        UserApplication.userDataManager.SetCharaHave(gachaPickCharacterId);
+        UserApplication.charaGridRenderer.RefreshGrid();
     }
 
     public void DrawPerform()

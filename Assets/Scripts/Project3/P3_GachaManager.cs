@@ -34,12 +34,8 @@ public class P3_GachaManager : MonoBehaviour
 
     public void OnClickGachaButton()
     {
-        GameObject obj = GameObject.Find("UserDataManager");
-        if (obj != null)
-        {
-            P3_UserDataManager userDataManager = obj.GetComponent<P3_UserDataManager>();
-            userDataManager.CallPlayGacha(int.Parse(userDataManager.GetCurrentUserId()));
-        }
+        int userId = UserApplication.userDataManager.GetUserId();
+        UserApplication.phpConnectManager.CallPlayGacha(userId);
     }
 
     public void DrawPerform(string gachaResult)
@@ -48,12 +44,18 @@ public class P3_GachaManager : MonoBehaviour
 
         gachaPerformInstance.SetActive(true);
         FixCharaManager.FixCharaData fixCharaData = UserApplication.fixCharaManager.GetFixCharaData(int.Parse(gachaResultArray[0]));
-        performImage.sprite = Resources.Load<Sprite>(fixCharaData.m_tachiePath);
-        performName.text = fixCharaData.m_name;
+        performImage.sprite = Resources.Load<Sprite>(fixCharaData.tachiePath);
+        performName.text = fixCharaData.name;
     }
 
     public void OnClickGachaPerformBack()
     {
         gachaPerformInstance.SetActive(false);
+    }
+
+    public void OnClickResetCharaHasFlag()
+    {
+        int userId = UserApplication.userDataManager.GetUserId();
+        UserApplication.phpConnectManager.CallReserCharaHasFlag(userId);
     }
 }

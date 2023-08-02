@@ -48,4 +48,44 @@ public class UserApplication : MonoBehaviour
             return S._fixCharaManager;
         }
     }
+
+    public BaseUserDataManager _userDataManager;
+    static public BaseUserDataManager userDataManager
+    {
+        get
+        {
+            if (S._userDataManager == null)
+            {
+                S._userDataManager = GameObject.Find("UserDataManager").GetComponent<BaseUserDataManager>();
+            }
+            return S._userDataManager;
+        }
+    }
+
+    public BaseCharaGridRenderer _charaGridRenderer;
+    static public BaseCharaGridRenderer charaGridRenderer
+    {
+        get
+        {
+            if (S._charaGridRenderer == null)
+            {
+                S._charaGridRenderer = GameObject.Find("UIParts_CharaGridRenderer").GetComponent<BaseCharaGridRenderer>();
+            }
+            return S._charaGridRenderer;
+        }
+    }
+
+    public BasePHPConnectManager _phpConnectManager;
+    static public BasePHPConnectManager phpConnectManager
+    {
+        get
+        {
+            if (S._phpConnectManager == null)
+            {
+                S._phpConnectManager = GameObject.Find("PHPConnectManager").GetComponent<BasePHPConnectManager>();
+            }
+            return S._phpConnectManager;
+        }
+    }
+
 }

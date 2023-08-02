@@ -6,7 +6,7 @@ using UnityEngine;
 public class FixCharaManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Load();
         DB_Disp();
@@ -23,7 +23,7 @@ public class FixCharaManager : MonoBehaviour
         string path = "FixData/CharaFixData";
 
         TextAsset csvFile;
-        m_fixCharaDataList = new List<FixCharaData>();
+        fixCharaDataList = new List<FixCharaData>();
 
         {
             csvFile = Resources.Load<TextAsset>(path);
@@ -35,12 +35,12 @@ public class FixCharaManager : MonoBehaviour
                 string[] lineArray = line.Split(',');
 
                 FixCharaData currentRow = new FixCharaData();
-                currentRow.m_id = int.Parse(lineArray[0]);
-                currentRow.m_name = lineArray[1];
-                currentRow.m_tachiePath = lineArray[2];
-                currentRow.m_gridPath = lineArray[3];
+                currentRow.id = int.Parse(lineArray[0]);
+                currentRow.name = lineArray[1];
+                currentRow.tachiePath = lineArray[2];
+                currentRow.gridPath = lineArray[3];
 
-                m_fixCharaDataList.Add(currentRow);
+                fixCharaDataList.Add(currentRow);
             }
         }
     }
@@ -51,12 +51,12 @@ public class FixCharaManager : MonoBehaviour
         {
             return null;
         }
-        return m_fixCharaDataList[charaId];
+        return fixCharaDataList[charaId];
     }
 
     public int GetFixCharaNum()
     {
-        return m_fixCharaDataList.Count;
+        return fixCharaDataList.Count;
     }
 
     public int GetCharaIdFromCharaName(string charaName)
@@ -64,7 +64,7 @@ public class FixCharaManager : MonoBehaviour
         for (int i = 0; i < GetFixCharaNum(); i++)
         {
             FixCharaData data = GetFixCharaData(i);
-            if (data.m_name.Equals(charaName))
+            if (data.name.Equals(charaName))
             {
                 return i;
             }
@@ -82,18 +82,18 @@ public class FixCharaManager : MonoBehaviour
         for (int i = 0; i < GetFixCharaNum(); i++)
         {
             FixCharaData data = GetFixCharaData(i);
-            Debug.Log(data.m_id + "," + data.m_name + "," + data.m_tachiePath + "," + data.m_gridPath);
+            Debug.Log(data.id + "," + data.name + "," + data.tachiePath + "," + data.gridPath);
         }
     }
 
     public class FixCharaData
     {
-        public int m_id;
-        public string m_name;
-        public string m_tachiePath;
-        public string m_gridPath;
+        public int id;
+        public string name;
+        public string tachiePath;
+        public string gridPath;
     }
 
-    List<FixCharaData> m_fixCharaDataList;
+    List<FixCharaData> fixCharaDataList;
     public const int INVALID_ID = -1;
 }

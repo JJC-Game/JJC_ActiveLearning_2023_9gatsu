@@ -6,9 +6,9 @@ using UnityEngine.Assertions;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class P3_UserDataManager : MonoBehaviour
+public class P3_UserDataManager : BaseUserDataManager
 {
-    enum UserDataColumn
+    public enum UserDataColumn
     {
         ID,
         NAME,
@@ -16,177 +16,54 @@ public class P3_UserDataManager : MonoBehaviour
         NUM
     };
 
-    public const string ID_SAVE_KEY = "AL_2023_9GATSU_USER_ID";
+    int userId = 0;
 
-    void Awake()
+    new protected void Awake()
     {
-        m_userId = "1";
-        CallOnGameStart(() => RefreshUserDataUI(), () => CallError());
+        base.Awake();
+        userId = 1;
     }
 
-    public void CallError()
+    void Start()
     {
-        Debug.Assert(false);
+        UserApplication.phpConnectManager.CallUserData(userId);
     }
 
-    public void CallOnGameStart(UnityAction callbackFunc = null, UnityAction errorCallbackFunc = null)
+    public override int GetUserId()
     {
-        m_gameStartCallbackFunc = callbackFunc;
-        m_gameStartErrorCallbackFunc = errorCallbackFunc;
-        OnGameStartGetUserData_1st();
+        return userId;
     }
 
-    // ゲーム開始時に、データベースからユーザーデータを取得するための関数.
-    // まずは、UserDataの取得.
-    private void OnGameStartGetUserData_1st()
+    public override void SetUserData(string inputText)
     {
-        string url = "http://18.178.60.234/students/active_larning/user00/PHP/GetUserDataFromUserId.php?userId=" + m_userId;
-        StartCoroutine(GetUserData(url, () => m_gameStartCallbackFunc(), () => m_gameStartErrorCallbackFunc()));
-    }
-
-    public void CallUserData(int userId)
-    {
+        string[] textArray = inputText.Split(",");
+        if (textArray.Length != (int)UserDataColumn.NUM)
         {
-            string url = "http://18.178.60.234/students/active_larning/user00/PHP/GetUserDataFromUserId.php?userId=" + userId;
-            StartCoroutine(GetUserData(url, () => RefreshUserDataUI()));
-        }
-    }
-
-    public void CallPlayGacha(int userId)
-    {
-        string url = "http://18.178.60.234/students/active_larning/user00/PHP/PlayGacha.php?userId=" + userId;
-
-        StartCoroutine(GachaAccess(url, () => RefreshGachaPerformUI()));
-    }
-
-    // ユーザデータを取得してきて、メンバ変数に格納する.
-    IEnumerator GetUserData(string url, UnityAction callbackFunc = null, UnityAction errorCallbackFunc = null)
-    {
-        WWWForm form = new WWWForm();
-        using (WWW www = new WWW(url, form))
-        {
-            yield return www;
-            if (!string.IsNullOrEmpty(www.error))
-            {
-                Debug.Log("error:" + www.error);
-                if (errorCallbackFunc != null)
-                {
-                    errorCallbackFunc();
-                }
-                yield break;
-            }
-            Debug.Log("text:" + www.text);
-
-            string resultText = www.text;
-            string[] resultTextArray = resultText.Split(",");
-            if (resultTextArray.Length != (int)UserDataColumn.NUM)
-            {
-                if (errorCallbackFunc != null)
-                {
-                    errorCallbackFunc();
-                }
-                yield break;
-            }
-
-            m_userId = resultTextArray[(int)UserDataColumn.ID];
-            m_name = resultTextArray[(int)UserDataColumn.NAME];
-            m_hasCharaFlag = resultTextArray[(int)UserDataColumn.HASCHARAFLAG];
-            m_isUserDataLoadComplete = true;
-
-            if (callbackFunc != null)
-            {
-                callbackFunc();
-            }
-        }
-    }
-
-    IEnumerator GachaAccess(string url, UnityAction callbackFunc = null, UnityAction errorCallbackFunc = null)
-    {
-        WWWForm form = new WWWForm();
-        using (WWW www = new WWW(url, form))
-        {
-            yield return www;
-            if (!string.IsNullOrEmpty(www.error))
-            {
-                Debug.Log("error:" + www.error);
-                yield break;
-            }
-            Debug.Log("text:" + www.text);
-
-            m_currentGachaResult = www.text;
-
-            if (callbackFunc != null)
-            {
-                callbackFunc();
-            }
-        }
-    }
-
-    // 単純に当該のURLにアクセスする.
-    IEnumerator UrlAccess(string url, UnityAction callbackFunc = null)
-    {
-        WWWForm form = new WWWForm();
-        using (WWW www = new WWW(url, form))
-        {
-            yield return www;
-            if (!string.IsNullOrEmpty(www.error))
-            {
-                Debug.Log("error:" + www.error);
-                yield break;
-            }
-            Debug.Log("text:" + www.text);
-
-            if (callbackFunc != null)
-            {
-                callbackFunc();
-            }
-        }
-    }
-
-    private void RefreshUserDataUI()
-    {
-        Debug.Log(m_userId + "," + m_name + "," + m_hasCharaFlag);
-    }
-
-    private void RefreshGachaPerformUI()
-    {
-        GameObject obj = GameObject.Find("GachaManager");
-        if (obj != null)
-        {
-            P3_GachaManager gachaManager = obj.GetComponent<P3_GachaManager>();
-            gachaManager.DrawPerform(m_currentGachaResult);
+            Debug.LogAssertion("not match UserData");
+            return;
         }
 
-        RefreshUserDataUI();
+        int inputTextUserId = int.Parse(textArray[(int)UserDataColumn.ID]);
+        if (userId != inputTextUserId)
+        {
+            Debug.LogAssertion("取得したデータのユーザIDが、このアカウントのユーザIDと異なっています");
+            return;
+        }
+
+        userName = textArray[(int)UserDataColumn.NAME];
+        string inputTextHasCharaFlag = textArray[(int)UserDataColumn.HASCHARAFLAG];
+        uint hasCharaFlag = uint.Parse(inputTextHasCharaFlag);
+
+        for (int charaId = 0; charaId < DefineParam.CHARA_NUM; charaId++)
+        {
+            // 所持フラグを元にして、所持しているかどうかを確認する.
+            bool isNotHaveChara = false;
+            // シフト演算子を使って、二進数で確認する.
+            // 当該のビットの値のANDの結果が0なら、フラグが立っていない = 所持していない.
+            // 当該のビットの値のANDの結果が0ではないなら、フラグが立っている = 所持している.
+            hasChara[charaId] = ((hasCharaFlag & (1 << charaId)) != 0);
+        }
+
+        UserApplication.charaGridRenderer.RefreshGrid();
     }
-
-    public string GetCurrentUserId()
-    {
-        return m_userId;
-    }
-
-    public string GetUserName()
-    {
-        return m_name;
-    }
-
-    public string GetCurrentHasCharaFlag()
-    {
-        return m_hasCharaFlag;
-    }
-
-    public string GetCurrentGachaResult()
-    {
-        return m_currentGachaResult;
-    }
-
-    // UserDataManagerクラスのメンバ変数の宣言.
-    string m_userId = "0";
-    string m_name = "";
-    string m_hasCharaFlag = "0";
-    string m_currentGachaResult = "";
-    bool m_isUserDataLoadComplete = false;
-    UnityAction m_gameStartCallbackFunc = null;
-    UnityAction m_gameStartErrorCallbackFunc = null;
-
 }
