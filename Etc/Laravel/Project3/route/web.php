@@ -17,6 +17,7 @@ use App\Http\Controllers\AppUserController;
 
 Route::get('/app_user/{id}', [AppUserController::class, 'app_user'])->name('al.app_user');
 Route::get('/play_chara_gacha/{id}', [AppUserController::class, 'play_chara_gacha'])->name('al.play_chara_gacha');
+Route::get('/play_chara_gacha_10/{id}', [AppUserController::class, 'play_chara_gacha_10'])->name('al.play_chara_gacha_10');
 Route::get('/clear_has_chara_flag/{id}', [AppUserController::class, 'clear_has_chara_flag'])->name('al.clear_has_chara_flag');
 
 

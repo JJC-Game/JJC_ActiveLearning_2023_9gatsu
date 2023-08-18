@@ -67,6 +67,7 @@ abstract public class BasePHPConnectManager : MonoBehaviour
 
     abstract public void CallUserData(int userId);
     abstract public void CallPlayGacha(int userId);
+    abstract public void CallPlayGacha10(int userId);
     abstract public void CallClearHasCharaFlag(int userId);
 
 }

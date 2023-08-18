@@ -25,6 +25,12 @@ public class P3_PHPConnectManager : BasePHPConnectManager
         string phpFileName = "play_chara_gacha/" + userId.ToString();
         CallPHPConnection(phpFileName, () => RefreshGachaPerformUI());
     }
+    override public void CallPlayGacha10(int userId)
+    {
+        calledUserId = userId;
+        string phpFileName = "play_chara_gacha_10/" + userId.ToString();
+        CallPHPConnection(phpFileName, () => RefreshGacha10PerformUI());
+    }
     private void RefreshGachaPerformUI()
     {
         GameObject obj = GameObject.Find("GachaManager");
@@ -32,6 +38,17 @@ public class P3_PHPConnectManager : BasePHPConnectManager
         {
             P3_GachaManager gachaManager = obj.GetComponent<P3_GachaManager>();
             gachaManager.DrawPerform(phpConnectResultText);
+        }
+        CallUserData(calledUserId);
+    }
+
+    private void RefreshGacha10PerformUI()
+    {
+        GameObject obj = GameObject.Find("GachaManager");
+        if (obj != null)
+        {
+            P3_GachaManager gachaManager = obj.GetComponent<P3_GachaManager>();
+            gachaManager.DrawPerform10(phpConnectResultText);
         }
         CallUserData(calledUserId);
     }
