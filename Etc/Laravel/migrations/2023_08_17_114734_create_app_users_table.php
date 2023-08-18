@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('gacha_point');
-            $table->integer('has_chara_flag');
+            $table->integer('has_chara_flag')->unsigned();
             $table->timestamps();
         });
     }
