@@ -11,7 +11,7 @@ public class P3_PHPConnectManager : BasePHPConnectManager
     override public void CallUserData(int userId)
     {
         calledUserId = userId;
-        string phpFileName = "GetUserDataFromUserId.php?userId=" + userId.ToString();
+        string phpFileName = "app_user/" + userId.ToString();
         CallPHPConnection(phpFileName, () => RefreshUserDataUI());
     }
     private void RefreshUserDataUI()
@@ -22,7 +22,7 @@ public class P3_PHPConnectManager : BasePHPConnectManager
     override public void CallPlayGacha(int userId)
     {
         calledUserId = userId;
-        string phpFileName = "PlayGacha.php?userId=" + userId.ToString();
+        string phpFileName = "play_chara_gacha/" + userId.ToString();
         CallPHPConnection(phpFileName, () => RefreshGachaPerformUI());
     }
     private void RefreshGachaPerformUI()
@@ -36,14 +36,14 @@ public class P3_PHPConnectManager : BasePHPConnectManager
         CallUserData(calledUserId);
     }
 
-    override public void CallReserCharaHasFlag(int userId)
+    override public void CallClearHasCharaFlag(int userId)
     {
         calledUserId = userId;
-        string phpFileName = "ResetHasCharaFlag.php?userId=" + userId.ToString();
-        CallPHPConnection(phpFileName, () => CallbackReserHasCharaFlag());
+        string phpFileName = "clear_has_chara_flag/" + userId.ToString();
+        CallPHPConnection(phpFileName, () => CallbackClearHasCharaFlag());
     }
 
-    private void CallbackReserHasCharaFlag()
+    private void CallbackClearHasCharaFlag()
     {
         CallUserData(calledUserId);
     }

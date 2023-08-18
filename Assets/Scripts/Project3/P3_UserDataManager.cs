@@ -12,7 +12,8 @@ public class P3_UserDataManager : BaseUserDataManager
     {
         ID,
         NAME,
-        HASCHARAFLAG,
+        GACHA_POINT,
+        HAS_CHARA_FLAG,
         NUM
     };
 
@@ -51,7 +52,8 @@ public class P3_UserDataManager : BaseUserDataManager
         }
 
         userName = textArray[(int)UserDataColumn.NAME];
-        string inputTextHasCharaFlag = textArray[(int)UserDataColumn.HASCHARAFLAG];
+        gachaPoint = int.Parse(textArray[(int)UserDataColumn.GACHA_POINT]);
+        string inputTextHasCharaFlag = textArray[(int)UserDataColumn.HAS_CHARA_FLAG];
         uint hasCharaFlag = uint.Parse(inputTextHasCharaFlag);
 
         for (int charaId = 0; charaId < DefineParam.CHARA_NUM; charaId++)

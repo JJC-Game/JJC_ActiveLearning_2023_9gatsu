@@ -1,0 +1,78 @@
+# ユーザ削除
+sudo userdel -r al_user_2023_9gatsu_95
+sudo userdel -r al_user_2023_9gatsu_96
+sudo userdel -r al_user_2023_9gatsu_97
+sudo userdel -r al_user_2023_9gatsu_98
+sudo userdel -r al_user_2023_9gatsu_99
+
+# ユーザ登録状況を確認.
+cat /etc/passwd
+
+
+
+# ユーザ追加のコマンド
+# --gecos "" は、部屋番号とかの入力をしない.
+# --disabled-passwordは、パスワードの入力をしない（秘密鍵でアクセスするために不要）
+sudo adduser --gecos "" --disabled-password al_user_2023_9gatsu_99
+sudo su al_user_2023_9gatsu_99
+mkdir .ssh
+chmod 700 .ssh
+touch .ssh/authorized_keys
+chmod 600 .ssh/authorized_keys
+vi .ssh/authorized_keys
+
+# 開発環境の準備
+php -v
+
+# アプリケーションディレクトリの作製
+composer create-project laravel/laravel al_2023_9gatsu --prefer-dist
+
+# モデルと、コントローラの作製
+php artisan make:model AppUser -m -c -r
+php artisan make:model GachaItem -m
+php artisan make:model GachaWeapon -m
+
+# データベース名とユーザ名
+ユーザ名　al_user_2023_9gatsu_99
+パスワード　FRMsMp(LLe4rVcaM
+データベース名　al_user_2023_9gatsu_99_gacha
+
+# モデル名、マイグレーションファイルの編集
+AppUser アプリケーションにおけるユーザ情報.
+    name
+    gacha_point
+    has_chara_flag
+GachaItem ガチャで引いたアイテム一覧.
+    item_id
+    app_user_id
+GachaWeapon ガチャで引いた武器一覧.
+    weapon_id
+    app_user_id
+
+# FTP環境を準備する
+ローカル
+C:\work\ACTIVE_LEARNING
+サーバー
+/home/al_user_2023_9gatsu_99
+
+# マイグレートを実行し、データベースを作る.
+php artisan migrate
+※ migrateの前に、.envを編集したうえで、データベースを作っておく必要がある.
+
+# シンボリックリンクを作る.
+ln -s /home/al_user_2023_9gatsu_99/al_2023_9gatsu/public /opt/bitnami/apache/htdocs/students/active_larning/user99
+
+# URLにアクセスする.
+http://18.178.60.234/students/active_larning/user99
+
+# ログフォルダのパーミッション設定をする.
+chmod -R 777 /home/al_user_2023_9gatsu_99/al_2023_9gatsu/storage
+
+# URLにアクセスし、ユーザ情報が取れることを確認する.
+http://18.178.60.234/students/active_larning/user99/app_user/1
+
+# URLにアクセスし、ガチャができることを確認する.
+http://18.178.60.234/students/active_larning/user99/play_chara_gacha/1
+
+# URLにアクセスし、キャラ所持フラグが消えることを確認する.
+http://18.178.60.234/students/active_larning/user99/clear_has_chara_flag/1

@@ -5,12 +5,14 @@ using UnityEngine;
 public class BaseUserDataManager : MonoBehaviour
 {
     public string userName = "PLAYER";
+    protected int gachaPoint = 0;
     protected bool[] hasChara;
     protected int[] currentGachaResult_CharaId;
 
     // Start is called before the first frame update
     protected void Awake()
     {
+        gachaPoint = 0;
         hasChara = new bool[DefineParam.CHARA_NUM];
         for (int i = 0; i < DefineParam.CHARA_NUM; i++)
         {

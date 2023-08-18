@@ -52,6 +52,6 @@ public class P3_GachaManager : MonoBehaviour
     public void OnClickResetCharaHasFlag()
     {
         int userId = UserApplication.userDataManager.GetUserId();
-        UserApplication.phpConnectManager.CallReserCharaHasFlag(userId);
+        UserApplication.phpConnectManager.CallClearHasCharaFlag(userId);
     }
 }
