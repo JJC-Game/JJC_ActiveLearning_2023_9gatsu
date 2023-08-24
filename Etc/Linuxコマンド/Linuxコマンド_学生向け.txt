@@ -1,0 +1,50 @@
+# アプリケーションディレクトリの作製
+composer create-project laravel/laravel al_2023_9gatsu --prefer-dist
+
+# モデルと、コントローラの作製
+php artisan make:model AppUser -m -c -r
+
+# データベース名とユーザ名
+ユーザ名　al_user_2023_9gatsu_99
+パスワード　FRMsMp(LLe4rVcaM
+データベース名　al_user_2023_9gatsu_99_gacha
+
+# モデル名、マイグレーションファイルの編集
+AppUser アプリケーションにおけるユーザ情報.
+    name
+    gacha_point
+    has_chara_flag
+
+# FTP環境を準備する
+ローカル
+C:\work\ACTIVE_LEARNING
+
+#.envを編集する.
+DB_CONNECTION=mysql
+DB_HOST=18.178.60.234
+DB_PORT=3306
+DB_DATABASE=al_user_2023_9gatsu_99_gacha
+DB_USERNAME=al_user_2023_9gatsu_99
+DB_PASSWORD=FRMsMp(LLe4rVcaM
+
+# マイグレートを実行し、データベースを作る.
+php artisan migrate
+※ migrateの前に、.envを編集したうえで、データベースを作っておく必要がある.
+
+# シンボリックリンクを作る.
+ln -s /home/al_user_2023_9gatsu_99/al_2023_9gatsu/public /opt/bitnami/apache/htdocs/students/active_larning/user99
+
+# URLにアクセスする.
+http://18.178.60.234/students/active_larning/user99
+
+# ログフォルダのパーミッション設定をする.
+chmod -R 777 /home/al_user_2023_9gatsu_99/al_2023_9gatsu/storage
+
+# URLにアクセスし、ユーザ情報が取れることを確認する.
+http://18.178.60.234/students/active_larning/user99/app_user/1
+
+# URLにアクセスし、ガチャができることを確認する.
+http://18.178.60.234/students/active_larning/user99/play_chara_gacha/1
+
+# URLにアクセスし、キャラ所持フラグが消えることを確認する.
+http://18.178.60.234/students/active_larning/user99/clear_has_chara_flag/1
